@@ -1,0 +1,53 @@
+{
+  "name": "taklimakan-smartcontracts",
+  "version": "1.0.0",
+  "description": "Taklimakan",
+  "main": "",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^2.0.1",
+    "solidity-test-util": "^1.0.0",
+    "truffle": "^5.0.8"
+  },
+  "scripts": {
+    "test": "truffle compile && truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:usetech-llc/livetree.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "",
+  "dependencies": {
+    "bignumber.js": "^8.0.1",
+    "body-parser": "^1.18.3",
+    "delay": "^4.1.0",
+    "express": "*",
+    "express-rate-limit": "*",
+    "fs": "0.0.1-security",
+    "git": "^0.1.5",
+    "json2csv": "^3.11.5",
+    "mysql": "*",
+    "path": "^0.12.7",
+    "solc": "^0.4.18",
+    "syslog-client": "^1.1.1",
+    "web3": "^1.0.0-beta.31"
+  },
+  "standard": {
+    "globals": [
+      "it",
+      "assert",
+      "beforeEach",
+      "afterEach",
+      "describe",
+      "contract",
+      "artifacts",
+      "web3"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+build/
+node_modules/
+.idea
+*.node-xr
+*.csv
+data/
+services/config.js
