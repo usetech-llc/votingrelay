@@ -222,7 +222,7 @@ contract OCVRP {
     }
 
     /**
-    * TODO: Implement collateral token deposit by the Relayer
+    * TODO: Implement collateral token withdraw by the Relayer
     *
     */
     function withdrawCollatealToken(uint16 pollId)
