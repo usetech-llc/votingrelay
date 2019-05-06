@@ -5,3 +5,4 @@ node_modules/
 *.csv
 data/
 services/config.js
+test/testaddresses.json

@@ -1,0 +1,181 @@
+swagger: '2.0'
+info:
+  description: This is a voting relay API
+  version: 1.0.0
+  title: Voting Relay API
+  # put the contact info for your development or API team
+  contact:
+    email: gz@usetech.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Operations available to admin users
+- name: users
+  description: Operations available to all users
+
+paths:
+  /vote:
+    put:
+      tags:
+      - users
+      summary: submit a user vote
+      operationId: submitVote
+      description: |
+        You can sign your vote with your private key and submit it
+        to this endpoint. You will get voting receipt in response,
+        which contains the batch ID and voter number.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: votingMessage
+        description: signed voting message
+        required: true
+        schema:
+          $ref: '#/definitions/VotingMessage'
+      responses:
+        200:
+          description: vote is accepted and signed voting receipt is included in the response
+          schema:
+            $ref: '#/definitions/VotingReceipt'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - admins
+      summary: create a new poll
+      operationId: createPoll
+      description: Creates new voting
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: options
+        description: Voting options in new poll
+        schema:
+          $ref: '#/definitions/Poll'
+      responses:
+        201:
+          description: item created
+          schema:
+            $ref: '#/definitions/PollId'
+        400:
+          description: invalid input, object invalid
+definitions:
+  VotingMessage:
+    type: object
+    required:
+    - pollId
+    - vote
+    - rsvSignature
+    properties:
+      pollId:
+        description: pass ID of the poll that vote is made for
+        type: number
+        format: int32
+        example: 123
+      vote:
+        description: number of voted choice
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 255
+      rsvSignature:
+        $ref: '#/definitions/RSVSignature'
+
+  VotingReceipt:
+    type: object
+    required:
+    - batchId
+    - voterNumber
+    - rsvSignature
+    properties:
+      batchId:
+        type: integer
+        format: int32
+        minimum: 0
+        example: 5
+      voterNumber:
+        type: integer
+        format: int32
+        minimum: 0
+        example: 500
+      rsvSignature:
+        $ref: '#/definitions/RSVSignature'
+  RSVSignature:
+    type: object
+    required:
+    - r
+    - s
+    - v
+    properties:
+      r:
+        type: string
+        example: '0x2b0b0e45af06c1df5f8da120551f3119111e17f326603088ecf4c344220da6ff'
+      s:
+        type: string
+        example: '0x2049e3c45404fc2026d1da6e0c72fa39a8eeb20088981f325fe9e994c14fe575'
+      v:
+        type: string
+        example: '0x1b'
+  Poll:
+    type: object
+    required:
+    - options
+    - votingBlock
+    - challengeBlock
+    - clearingBlock
+    - slashingBlock
+    - endBlock
+    properties:
+      options:
+        type: array
+        items:
+          type: integer
+          format: int8
+        example: [0, 1]
+      votingBlock:
+        type: integer
+        format: int32
+        example: 4000000
+      challengeBlock:
+        type: integer
+        format: int32
+        example: 4000100
+      clearingBlock:
+        type: integer
+        format: int32
+        example: 4000200
+      slashingBlock:
+        type: integer
+        format: int32
+        example: 4000300
+      endBlock:
+        type: integer
+        format: int32
+        example: 4000400
+  PollId:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: number
+        format: int32
+        minimum: 0
+        example: 123
+
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /gregzaitsev/VotingRelay/1.0.0
+schemes:
+ - https

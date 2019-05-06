@@ -3,7 +3,7 @@ pragma solidity 0.4.25;
 contract OCVRP {
 
     struct Batch {
-        uint32 previousVoterCount;  // Defined the first voter number in this batch
+        uint32 previousVoterCount;  // Defines the first voter number in this batch
         uint16 batchSize;           // Number of voters included in this batch
         bytes32 addressHash;        // Chained sha3 hash of all addresses
     }
