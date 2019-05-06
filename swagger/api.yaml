@@ -1,6 +1,33 @@
 swagger: '2.0'
 info:
-  description: This is a voting relay API
+  description: |
+    <h2>General Description</h2>
+
+    Voting relay backend would maintain the database of polls and
+    votes. Therefore, only  API calls that implement interaction
+    with this database are necessary and are documented here. If
+    operation is blockchain-only, it is not included in this API
+    document and will not be implemented in form of API.
+
+    For example, submitting a vote challenge by a user does not
+    require interaction with database and can be implemented
+    purely in frontend throught web3 provider which will allow
+    submitting challenges straight to blockchain. On the contrary,
+    clearing challenges requires partial resubmitting of the
+    challenged batch, which is stored in database, and will require
+    corresponding API endpoint.
+
+    <h2>Architecture</h2>
+
+    There are two groups of users for this API - admins and users.
+    Endpoints available to users do not require interaction with
+    voting smart contract, and can be invoked by all platform users.
+    These endpoints will be invoked by user actions in frontend.
+    Endpoints available to admins require interaction with both
+    blockchain and database. BC transactions will be signed (and
+    paid for) by backend relay.
+
+
   version: 1.0.0
   title: Voting Relay API
   # put the contact info for your development or API team
@@ -70,6 +97,46 @@ paths:
           description: item created
           schema:
             $ref: '#/definitions/PollId'
+        400:
+          description: invalid input, object invalid
+
+  /challenge:
+    get:
+      tags:
+      - admins
+      summary: get list of challenges
+      operationId: getChallenge
+      description: get full list of challenges
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/ChallengeList'
+        400:
+          description: bad input parameter
+    put:
+      tags:
+      - admins
+      summary: clear a challenge
+      operationId: clearChallenge
+      description: Clears all challenges within a batch, get cahllenge list after this call before calling this endpoint again
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: challenge
+        description: Challenge to clear
+        schema:
+          $ref: '#/definitions/Challenge'
+      responses:
+        200:
+          description: challenge cleared
         400:
           description: invalid input, object invalid
 
@@ -182,6 +249,33 @@ definitions:
         format: int32
         minimum: 0
         example: 123
+
+  ChallengeList:
+    type: array
+    items:
+      $ref: '#/definitions/Challenge'
+
+  Challenge:
+    type: object
+    required:
+    - pollId
+    - batchId
+    - voterNumber
+    properties:
+      pollId:
+        type: number
+        format: int32
+        example: 123
+      batchId:
+        type: integer
+        format: int32
+        minimum: 0
+        example: 5
+      voterNumber:
+        type: integer
+        format: int32
+        minimum: 0
+        example: 500
 
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
