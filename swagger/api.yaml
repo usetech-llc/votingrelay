@@ -28,7 +28,9 @@ paths:
       description: |
         You can sign your vote with your private key and submit it
         to this endpoint. You will get voting receipt in response,
-        which contains the batch ID and voter number.
+        which contains the batch ID and voter number. If your address
+        already voted, an existing receipt will be returned, no
+        matter if there is a change in vote or not.
       consumes:
       - application/json
       produces:
@@ -70,6 +72,7 @@ paths:
             $ref: '#/definitions/PollId'
         400:
           description: invalid input, object invalid
+
 definitions:
   VotingMessage:
     type: object
@@ -95,10 +98,16 @@ definitions:
   VotingReceipt:
     type: object
     required:
+    - pollId
     - batchId
     - voterNumber
     - rsvSignature
     properties:
+      pollId:
+        type: integer
+        format: int32
+        minimum: 0
+        example: 123
       batchId:
         type: integer
         format: int32
