@@ -100,6 +100,11 @@ paths:
             $ref: '#/definitions/PollId'
         400:
           description: invalid input, object invalid
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+
 
 definitions:
   VotingMessage:
@@ -165,11 +170,6 @@ definitions:
         type: string
         example: '0x1b'
 
-  PollList:
-    type: array
-    items:
-      $ref: '#/definitions/Poll'
-
   Poll:
     type: object
     required:
@@ -217,35 +217,9 @@ definitions:
         minimum: 0
         example: 123
 
-  ChallengeList:
-    type: array
-    items:
-      $ref: '#/definitions/Challenge'
-
-  Challenge:
-    type: object
-    required:
-    - pollId
-    - batchId
-    - voterNumber
-    properties:
-      pollId:
-        type: number
-        format: int32
-        example: 123
-      batchId:
-        type: integer
-        format: int32
-        minimum: 0
-        example: 5
-      voterNumber:
-        type: integer
-        format: int32
-        minimum: 0
-        example: 500
-      status:
-        type: string
-        example: "cleared"
+  ErrorMessage:
+    type: string
+    example: "Insufficient collateral token amount"
 
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
