@@ -12,10 +12,11 @@ info:
     For example, submitting a vote challenge by a user does not
     require interaction with database and can be implemented
     purely in frontend throught web3 provider which will allow
-    submitting challenges straight to blockchain. On the contrary,
-    clearing challenges requires partial resubmitting of the
-    challenged batch, which is stored in database, and will require
-    corresponding API endpoint.
+    submitting challenges straight to blockchain.
+
+    Clearing challenges requires partial resubmitting of the
+    challenged batch, which is stored in database, but this operation
+    does not require API and is done in the backend service.
 
     <h2>Architecture</h2>
 
@@ -100,46 +101,6 @@ paths:
         400:
           description: invalid input, object invalid
 
-  /challenge:
-    get:
-      tags:
-      - admins
-      summary: get list of challenges
-      operationId: getChallenge
-      description: get full list of challenges
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        200:
-          description: ok
-          schema:
-            $ref: '#/definitions/ChallengeList'
-        400:
-          description: bad input parameter
-    put:
-      tags:
-      - admins
-      summary: clear a challenge
-      operationId: clearChallenge
-      description: Clears all challenges within a batch, get cahllenge list after this call before calling this endpoint again
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: challenge
-        description: Challenge to clear
-        schema:
-          $ref: '#/definitions/Challenge'
-      responses:
-        200:
-          description: challenge cleared
-        400:
-          description: invalid input, object invalid
-
 definitions:
   VotingMessage:
     type: object
@@ -203,6 +164,12 @@ definitions:
       v:
         type: string
         example: '0x1b'
+
+  PollList:
+    type: array
+    items:
+      $ref: '#/definitions/Poll'
+
   Poll:
     type: object
     required:
@@ -276,6 +243,9 @@ definitions:
         format: int32
         minimum: 0
         example: 500
+      status:
+        type: string
+        example: "cleared"
 
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
